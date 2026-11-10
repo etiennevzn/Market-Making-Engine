@@ -6,3 +6,4 @@ build-*/
 *.obj
 *.o
 *.a
+*.zip

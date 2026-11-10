@@ -1,0 +1,29 @@
+#pragma once
+
+#include "Order.h"
+
+class OrderModify{
+public:
+    OrderModify(OrderId orderId, Side side, Price price, Quantity quantity):
+        orderId_(orderId),
+        side_(side),
+        price_(price),
+        quantity_(quantity)
+    {}
+
+    OrderId GetOrderId() const {return orderId_;}
+    Side GetSide() const {return side_;}
+    Price GetPrice() const {return price_;}
+    Quantity GetQuantity() const {return quantity_;}
+
+    //type and participant come from the order being replaced (the modify message itself doesn't carry them)
+    OrderPointer ToOrderPointer(OrderType type, ParticipantId participantId = Constants::NoParticipant) const {
+        return std::make_shared<Order>(type, GetOrderId(), GetSide(), GetPrice(), GetQuantity(), participantId); 
+    }
+
+private:
+    OrderId orderId_;
+    Side side_;
+    Price price_;
+    Quantity quantity_;
+};

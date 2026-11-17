@@ -1,9 +1,12 @@
-add_library(sim STATIC NoiseTraders.cpp StatsCollector.cpp)
+add_library(sim STATIC NoiseTraders.cpp StatsCollector.cpp Portfolio.cpp NaiveMarketMaker.cpp)
 target_include_directories(sim PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(sim PUBLIC orderbook)
 
 add_executable(sim_run main.cpp)
 target_link_libraries(sim_run PRIVATE sim)
+
+add_executable(mm_run mm_run.cpp)
+target_link_libraries(mm_run PRIVATE sim)
 
 if(BUILD_TESTING)
     if(NOT TARGET gtest)
@@ -16,7 +19,7 @@ if(BUILD_TESTING)
         FetchContent_MakeAvailable(googletest)
     endif()
 
-    add_executable(sim_tests tests/sim_tests.cpp)
+    add_executable(sim_tests tests/sim_tests.cpp tests/portfolio_tests.cpp)
     target_link_libraries(sim_tests PRIVATE sim gtest gtest_main)
 
     include(GoogleTest)
